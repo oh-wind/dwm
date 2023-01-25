@@ -1405,7 +1405,6 @@ runautostart(void)
 	char *xdgdatahome;
 	char *home;
 	struct stat sb;
-	system("echo $HOME > $HOME/log_dwm");
 
 	if ((home = getenv("HOME")) == NULL)
 		/* this is almost impossible */
