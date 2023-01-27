@@ -1,5 +1,10 @@
 patches/
 *.o
 dwm
+compile_commands.json
+
+# clangd
+.cache
+
 
 

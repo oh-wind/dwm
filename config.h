@@ -5,7 +5,7 @@ static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=14" };
+static const char *fonts[]          = { "monospace:size=12" };
 static const char dmenufont[]       = "monospace:size=10";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
@@ -30,6 +30,8 @@ static const Rule rules[] = {
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "firefox", "Toolkit",   "画中画",   0,            1,           -1 },
+	{ "firefox", "Toolkit",   "PictureInPicture",0,     1,           -1 },
 };
 
 /* layout(s) */
@@ -57,7 +59,7 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static const char *dmenucmd[] = { "rofi", "-modes", "combi", "-combi-modes", "run,drun,window", "-show", "combi", NULL  };
+static const char *dmenucmd[] = { "rofi", "-modes", "combi", "-combi-modes", "drun,run,window", "-show", "combi", NULL  };
 static const char *termcmd[]  = { "alacritty", NULL };
 
 static const Key keys[] = {
