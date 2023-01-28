@@ -195,7 +195,7 @@ static void resizeclient(Client *c, int x, int y, int w, int h);
 static void resizemouse(const Arg *arg);
 static void restack(Monitor *m);
 static void run(void);
-static void runautostart(void);
+static void runautostart(Bool is_stop);
 static void scan(void);
 static int sendevent(Client *c, Atom proto);
 static void sendmon(Client *c, Monitor *m);
@@ -240,6 +240,7 @@ static void zoom(const Arg *arg);
 /* variables */
 static const char autostartblocksh[] = "autostart_blocking.sh";
 static const char autostartsh[] = "autostart.sh";
+static const char autostopsh[] = "autostop.sh";
 static const char broken[] = "broken";
 static const char dwmdir[] = "dwm";
 static const char localshare[] = ".local/share";
@@ -1398,8 +1399,9 @@ run(void)
 }
 
 void
-runautostart(void)
+runautostart(Bool is_stop)
 {
+	
 	char *pathpfx;
 	char *path;
 	char *xdgdatahome;
@@ -1451,9 +1453,18 @@ runautostart(void)
 		}
 	}
 
+	const char *script_block = NULL;
+	const char *script_nonblock = NULL;
+	if(!is_stop){
+		script_block = autostartblocksh;
+		script_nonblock = autostartsh;
+	}else{
+		script_block = autostopsh;
+	}
+
 	/* try the blocking script first */
-	path = ecalloc(1, strlen(pathpfx) + strlen(autostartblocksh) + 2);
-	if (sprintf(path, "%s/%s", pathpfx, autostartblocksh) <= 0) {
+	path = ecalloc(1, strlen(pathpfx) + strlen(script_block) + 2);
+	if (sprintf(path, "%s/%s", pathpfx, script_block) <= 0) {
 		free(path);
 		free(pathpfx);
 	}
@@ -1461,15 +1472,16 @@ runautostart(void)
 	if (access(path, X_OK) == 0)
 		system(path);
 
-	/* now the non-blocking script */
-	if (sprintf(path, "%s/%s", pathpfx, autostartsh) <= 0) {
-		free(path);
-		free(pathpfx);
+	if(!is_stop){ // stop script must be blocking.
+		/* now the non-blocking script */
+		if (sprintf(path, "%s/%s", pathpfx, script_nonblock) <= 0) {
+			free(path);
+			free(pathpfx);
+		}
+
+		if (access(path, X_OK) == 0)
+			system(strcat(path, " &"));
 	}
-
-	if (access(path, X_OK) == 0)
-		system(strcat(path, " &"));
-
 	free(pathpfx);
 	free(path);
 }
@@ -2233,9 +2245,10 @@ main(int argc, char *argv[])
 		die("pledge");
 #endif /* __OpenBSD__ */
 	scan();
-	runautostart();
+	runautostart(False);
 	run();
 	cleanup();
 	XCloseDisplay(dpy);
+	runautostart(True);
 	return EXIT_SUCCESS;
 }
