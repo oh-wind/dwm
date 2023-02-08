@@ -210,7 +210,6 @@ drw_scm_create(Drw *drw, const char *clrnames[], size_t clrcount)
 		drw_clr_create(drw, &ret[i], clrnames[i]);
 	return ret;
 }
-
 void
 drw_setfontset(Drw *drw, Fnt *set)
 {
