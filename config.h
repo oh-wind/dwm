@@ -15,12 +15,21 @@ static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
+
+static const char col_gray5[]		= "#3e4048";
+static const char col_gray6[]		= "#575a69";
+
 static const char col_cyan[]        = "#005577";
 static const char col_cyan_cool[]     = "#1F8A7A";
+static const char col_purple[]      = "#be9af0";
+static const char col_purple2[]     = "#7280ab";
+
+static const char col_blue1[]		= "#81a2ba";
+
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan_cool,  col_cyan_cool  },
+	[SchemeNorm] = { col_blue1, col_gray5, col_gray2 },
+	[SchemeSel]  = { col_purple, col_gray6,  col_purple  },
 };
 
 /* tagging */
@@ -85,6 +94,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY|ShiftMask,             XK_s,      setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
+	{ MODKEY|ShiftMask,             XK_f,      togglefullscr,  {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
