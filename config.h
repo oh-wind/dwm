@@ -20,7 +20,7 @@ static const char col_gray5[]		= "#3e4048";
 static const char col_gray6[]		= "#575a69";
 
 static const char col_cyan[]        = "#005577";
-static const char col_cyan_cool[]     = "#1F8A7A";
+static const char col_cyan_cool[]   = "#1F8A7A";
 static const char col_purple[]      = "#be9af0";
 static const char col_purple2[]     = "#7280ab";
 
@@ -29,11 +29,11 @@ static const char col_blue1[]		= "#81a2ba";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_blue1, col_gray5, col_gray2 },
-	[SchemeSel]  = { col_purple, col_gray6,  col_purple  },
+	[SchemeSel]  = { col_purple, col_gray6,  col_gray6  },
 };
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "一", "二", "三", "四", "五", "六", "七", "八", "九" };
 
 static const Rule rules[] = {
 	/* xprop(1):
