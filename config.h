@@ -1,9 +1,5 @@
 /* See LICENSE file for copyright and license details. */
 
-#ifndef _CONFIG_DWM_
-#define _CONFIG_DWM_
-
-
 
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
@@ -59,7 +55,7 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "田=",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
+	{ "回>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
 };
 
@@ -134,5 +130,3 @@ static const Button buttons[] = {
 };
 
 
-
-#endif
