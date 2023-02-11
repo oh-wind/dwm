@@ -279,6 +279,9 @@ static Display *dpy;
 static Drw *drw;
 static Monitor *mons, *selmon;
 static Window root, wmcheckwin;
+static int statusclick;/* the item that was clicked on the status text */
+static int statusw;
+static int statuspid = -1;
 
 static const char autostartblocksh[] = "autostart_blocking.sh";
 static const char autostartsh[] = "autostart.sh";
@@ -457,9 +460,21 @@ buttonpress(XEvent *e)
 			arg.ui = 1 << i;
 		} else if (ev->x < x + TEXTW(selmon->ltsymbol))
 			click = ClkLtSymbol;
-		else if (ev->x > selmon->ww - (int)TEXTW(stext))
+		else if (ev->x > selmon->ww - statusw){
 			click = ClkStatusText;
-		else
+			x = selmon->ww - statusw;
+			int splitterlen = TEXTW(status_text_split) - lrpad;
+			statusclick = -1;
+			char *text = strtok(stext, status_text_split);
+			for( i = 0; x <= ev->x && text != NULL; text = strtok(NULL, status_text_split), ++i){
+				x += (TEXTW(text) - lrpad + splitterlen);
+				if(x > ev->x){
+					statusclick = i;
+					break;
+				}
+			}
+
+		} else
 			click = ClkWinTitle;
 	} else if ((c = wintoclient(ev->window))) {
 		focus(c);
@@ -2167,8 +2182,10 @@ updatesizehints(Client *c)
 void
 updatestatus(void)
 {
-	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
+	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext))){
 		strcpy(stext, "dwm-"VERSION);
+	}
+	statusw = TEXTW(stext) - lrpad;
 	drawbar(selmon);
 }
 

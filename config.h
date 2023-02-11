@@ -8,6 +8,7 @@ static const unsigned int gappx     = 4;       /* default gap between windows in
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
+
 // static const char *fonts[]          = {"JetBrains Mono:style=Regular:size=14", "Symbols Nerd Font:style=2048-em:size=18" };
 static const char *fonts[]          = {"JetBrains Mono:style=Bold:size=14", "Symbols Nerd Font:style=2048-em:size=18" };
 static const char col_gray1[]       = "#222222";
@@ -130,3 +131,4 @@ static const Button buttons[] = {
 };
 
 
+static const char *status_text_split = "|";
