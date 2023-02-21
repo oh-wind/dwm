@@ -45,7 +45,8 @@ static const Rule rules[] = {
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 	{ "firefox", "Toolkit",   "画中画",   0,            1,           -1 },
-	{ "firefox",       NULL,       "PictureInPicture",0,     1,           -1 },
+	{ "firefox",  NULL,       "PictureInPicture",0,     1,           -1 },
+	{ "QQ",      "qq",        "图片查看器",0,              1,           -1 }
 };
 
 /* layout(s) */
