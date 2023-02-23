@@ -181,6 +181,7 @@ static long getstate(Window w);
 static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
 static void grabbuttons(Client *c, int focused);
 static void grabkeys(void);
+static pid_t getstatusbarpid();
 static void incnmaster(const Arg *arg);
 static void keypress(XEvent *e);
 static void killclient(const Arg *arg);
@@ -215,6 +216,7 @@ static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
 static void sigchld(int unused);
 static void spawn(const Arg *arg);
+static void sigstatusbar(const Arg *arg);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void tile(Monitor *m);
@@ -465,11 +467,17 @@ buttonpress(XEvent *e)
 			x = selmon->ww - statusw;
 			int splitterlen = TEXTW(status_text_split) - lrpad;
 			statusclick = -1;
-			char *text = strtok(stext, status_text_split);
+			char stextcp[256] = {0};
+			strcpy(stextcp, stext);
+			char *text = strtok(stextcp, status_text_split);
 			for( i = 0; x <= ev->x && text != NULL; text = strtok(NULL, status_text_split), ++i){
 				x += (TEXTW(text) - lrpad + splitterlen);
-				if(x > ev->x){
+				if(x >= ev->x ){
 					statusclick = i;
+					//char *s = "echo %d > ~/.local/share/dwm/test.log";
+					//char ss[256] = {0};
+					//sprintf(ss, s, i);
+					//system(ss);
 					break;
 				}
 			}
@@ -2318,6 +2326,46 @@ zoom(const Arg *arg)
 		return;
 	pop(c);
 }
+
+
+pid_t
+getstatusbarpid(void)
+{
+	char buf[32], *str = buf, *c;
+	FILE *fp;
+
+	if (statuspid > 0) {
+		snprintf(buf, sizeof(buf), "/proc/%u/cmdline", statuspid);
+		if ((fp = fopen(buf, "r"))) {
+			fgets(buf, sizeof(buf), fp);
+			while ((c = strchr(str, '/')))
+				str = c + 1;
+			fclose(fp);
+			if (!strcmp(str, STATUSBAR))
+				return statuspid;
+		}
+	}
+	if (!(fp = popen("pidof -s "STATUSBAR, "r")))
+		return -1;
+	fgets(buf, sizeof(buf), fp);
+	pclose(fp);
+	return strtol(buf, NULL, 10);
+}
+
+void
+sigstatusbar(const Arg *arg)
+{
+	union sigval sv;
+
+	if (statusclick < 0)
+		return;
+	sv.sival_int = statusclick;
+	if ((statuspid = getstatusbarpid()) <= 0)
+		return;
+
+	sigqueue(statuspid, SIGRTMIN + arg->i, sv);
+}
+
 
 int
 main(int argc, char *argv[])
