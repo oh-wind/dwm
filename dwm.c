@@ -474,10 +474,6 @@ buttonpress(XEvent *e)
 				x += (TEXTW(text) - lrpad + splitterlen);
 				if(x >= ev->x ){
 					statusclick = i;
-					//char *s = "echo %d > ~/.local/share/dwm/test.log";
-					//char ss[256] = {0};
-					//sprintf(ss, s, i);
-					//system(ss);
 					break;
 				}
 			}
@@ -2355,15 +2351,15 @@ getstatusbarpid(void)
 void
 sigstatusbar(const Arg *arg)
 {
-	union sigval sv;
-
 	if (statusclick < 0)
 		return;
-	sv.sival_int = statusclick;
 	if ((statuspid = getstatusbarpid()) <= 0)
 		return;
 
-	sigqueue(statuspid, SIGRTMIN + arg->i, sv);
+	union sigval sv;
+	sv.sival_int = statusclick;
+
+	sigqueue(statuspid, (SIGRTMIN + arg->i), sv);
 }
 
 
